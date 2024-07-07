@@ -1,0 +1,611 @@
+{% assign sst = section.settings %}
+{%- assign xxl = 100 | divided_by: sst.xxl -%}
+{%- assign xl = 100 | divided_by: sst.xl -%}
+{%- assign lg = 100 | divided_by: sst.lg -%}
+{%- assign md = 100 | divided_by: sst.md -%}
+{%- assign sm = 100 | divided_by: sst.sm -%}
+{%- assign xs = 100 | divided_by: sst.xs -%}
+{%- assign collection = collections[sst.collection] -%}
+{%- assign product_limit = sst.limit -%}
+<div class="distance position-relative{% if sst.style == 'style2' and sst.banner == blank %} style2{% endif %}{% if sst.class != blank %} {{ sst.class }}{% endif %}{% if sst.animate == true %} wow fadeInUp animated{% endif %}" data-section-id="{{ section.id }}" data-section-type="nov-slick">
+  {% if sst.container == 'container' %}
+    <div class="container">
+  {% elsif sst.container == 'container-fluid' %}
+    <div class="container-fluid">
+  {% else %}
+    <div class="container-full" style="padding: 0 {{ sst.spacing | append: 'px' }}">
+  {% endif %}
+    <div class="container-inner position-relative overflow_hidden">
+      <div class="block-top d-flex align-items-center justify-content-between">
+        {% if sst.heading != blank or sst.subheading != blank %}
+          <div class="title_section">
+            {% if sst.heading != blank %}
+              <span class="title" style="color: {{ sst.heading_c }};">{{ sst.heading }}</span>
+            {% endif %}
+            {% if sst.subheading != blank %}
+              <span class="sub_title" style="color: {{ sst.subheading_c }};">{{ sst.subheading }}</span>
+            {% endif %}
+          </div>
+        {% endif %}
+        {% if sst.viewall %}
+          <div class="block-viewall d-flex align-items-center">
+            <i class="rbb-icon-menu-11"></i>
+            <a href="{{ collection.url }}" class="btn-viewall text-uppercase font-700">{{ 'sections.product_slider.view_all_collection' | t }}</a>
+          </div>
+        {% endif %}
+      </div>
+      {% if sst.show_el != 'none' %}
+        <div class="{% if  sst.el_p == 'top' %}sub-element__top{% else %}sub__element__abreast d-md-flex align-items-start{% endif %}{% if sst.el_p == 'right' %} flex-md-row-reverse{% endif %} position-relative">
+          <div class="block-sub__element position-relative">
+            {% if sst.show_el == 'banner' %}
+              <div class="ps_bn-cotent nov-sh-image-2 h-100">
+                {% assign img_url = sst.banner %}
+                <a href="{{ sst.bn_l }}">
+                  <div class="respone_image h-100 nov-sh-image-2" style="padding-top:{{ 1 | divided_by: img_url.aspect_ratio | times: 100}}%;">
+                    <img class="lazyload h-100"
+                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E"
+                    data-src="{{ img_url | img_url: '180x' }}"
+                    data-srcset="{{ img_url | img_url: '180x' }} 180w,{{ img_url | img_url: '380x' }} 380w,{{ img_url | img_url: '580x' }} 580w,{{ img_url | img_url: '768x' }} 768w,{{ img_url | img_url: '900x' }} 900w,{{ img_url | img_url: '1080x' }} 1080w,{{ img_url | img_url: '1170x' }} 1200w,{{ img_url | img_url: '1512x' }} 1512w,{{ img_url | img_url: '1728x' }} 1728w, {{ img_url | img_url: '2048x' }} 2048w" data-sizes="auto" alt="{{ img_url.alt }}" style="object-fit: cover">
+                  </div>
+                </a>
+                {% if sst.bn_t != blank or sst.bn_st != blank or sst.bn_btn != blank %}
+                  <div class="title_section mb-0 bn-block__content position-absolute text-center">
+                    {% if sst.bn_t != blank %}<span class="title white">{{ sst.bn_t }}</span>{% endif %}
+                    {% if sst.bn_st != blank %}<div class="sub_title white mt-20">{{ sst.bn_st }}</div>{% endif %}
+                    {% if sst.bn_btn != blank %}<a href="{{ sst.bn_l }}" class="bn-title btn mt-25">{{ sst.bn_btn }}</a>{% endif %}
+                  </div>
+                {% endif %}
+              </div>
+            {% endif %}
+            {% if sst.show_el == 'collection' %}
+              <div class="el-collection {% if sst.el_p != 'top' %}nov-block__collec-list{% else %}nov-block__collec-flex{% endif %}">
+                <div class="btn-toggle font-800 text-uppercase d-md-none d-flex align-items-center justify-content-between" btn-toggle data-toggle="CollecProSlider">
+                  <span>{{ 'sections.product_slider.category' | t }}</span>
+                  <i class="zmdi zmdi-chevron-down"></i>
+                </div>
+                <ul class="list-unstyled p-0 block-toggle" nov-toggle="CollecProSlider">
+                  {% for block in section.blocks %}
+                    <li><a href="{{ block.settings.link }}" class="font-700 d-block">{{ block.settings.title }}</a></li>
+                  {% endfor %}
+                </ul>
+              </div>
+            {% endif %}
+          </div>
+          <div class="block-product__slider{% if sst.show_border_item %} border-bottom{% endif %}{% if sst.show_el == 'collection' %} collection-border {{ sst.el_p }}{% endif %}">
+      {% endif %}
+      {% comment %} product slider {% endcomment %}
+      <div class="grid--view-items nov-slick-carousel row spacing-{{ sst.spacing }}{% if sst.show_border_item %} show-border{% endif %}"
+        data-autoplay="false" 
+        data-autoplayTimeout="6000" 
+        data-loop="false"
+        data-dots="false"
+        data-nav="{{ sst.show_nav }}"
+        data-row="{{ sst.row_number }}"
+        data-row_mobile="{{ sst.row_mobile }}"
+        data-items_xxl="{{ sst.xxl }}"
+        data-items="{{ sst.xl }}"
+        data-items_lg="{{ sst.lg }}"
+        data-items_md="{{ sst.md }}"
+        data-items_sm="{{ sst.sm }}"
+        data-items_xs="{{ sst.xs }}"
+        data-adaptiveheight="true">
+        {% for product in collection.products limit: product_limit %}
+          {% if sectionId == blank %}
+            {% assign sectionId = section.id %}
+          {% endif %}
+          <div class="block">
+            <div>
+              <div class="item p_item col">
+                {% render 'product-grid-item-style-1', product: product, sectionId: sectionId %}
+              </div>
+            </div>
+          </div>
+        {% else %}
+          {%- for i in (1..6) -%}
+            <div class="item p_item mb-30">
+              {%- capture current -%}{% cycle 1, 2, 3, 4 %}{%- endcapture -%}
+              {{ 'product-apparel-' | append: current | placeholder_svg_tag : 'placeholder-svg' }}
+            </div>
+          {%- endfor -%}
+        {% endfor %}
+      </div>
+      {% comment %} end product slider {% endcomment %}
+      {% if sst.show_el != 'none' %}
+         </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Vinova Products Slider",
+    "class": "section-product-slider",
+    "settings": [
+      {
+        "type": "richtext",
+        "id": "heading",
+        "label": "Heading",
+        "default": "<p>Vinova Product Slider</p>"
+      },
+      {
+        "type": "color",
+        "id": "heading_c",
+        "label": "Heading color",
+        "default": "#222222"
+      },
+      {
+        "type": "richtext",
+        "id": "subheading",
+        "label": "Sub heading",
+        "default": "<p>Subtitle from happy customers</p>"
+      },
+      {
+        "type": "color",
+        "id": "subheading_c",
+        "label": "Sub heading color",
+        "default": "#666666"
+      },
+      {
+        "type": "color",
+        "id": "bg_heading",
+        "label": "Background heading"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_border",
+        "label": "Show border bottom"
+      },
+      {
+        "type": "checkbox",
+        "id": "viewall",
+        "label": "Show view all"
+      },
+      {
+        "type": "color",
+        "id": "c_viewall",
+        "label": "View all color"
+      },
+      {
+        "type":  "header",
+        "content": "Sub element"
+      },
+      {
+        "type": "select",
+        "id": "show_el",
+        "label": "Show sub element",
+        "default": "none",
+        "options": [
+          { "value": "none", "label": "None" },
+          { "value": "banner", "label": "Banner" },
+          { "value": "collection", "label": "Collection" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "el_p",
+        "label": "Sub element position",
+        "default": "left",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          },
+          {
+            "value": "top",
+            "label": "Top"
+          }
+        ]
+      },
+      {
+        "type":  "header",
+        "content": "Banner element"
+      },
+      {
+        "type": "image_picker",
+        "id": "banner",
+        "label": "Banner"
+      },
+      {
+        "type": "text",
+        "id": "bn_t",
+        "label": "Banner title"
+      },
+      {
+        "type": "inline_richtext",
+        "id": "bn_st",
+        "label": "Banner sub title"
+      },
+      {
+        "type": "text",
+        "id": "bn_btn",
+        "label": "Banner button text"
+      },
+      {
+        "type": "url",
+        "id": "bn_l",
+        "label": "Banner link"
+      },
+      {
+        "type":  "header",
+        "content": "List collection element"
+      },
+      {
+        "type": "color",
+        "id": "c_collect",
+        "label": "Text color"
+      },
+      {
+        "type": "color",
+        "id": "c_collecth",
+        "label": "Text color hover"
+      },
+      {
+        "type": "color",
+        "id": "bg_collect",
+        "label": "Background color"
+      },
+      {
+        "type": "color",
+        "id": "bg_collecth",
+        "label": "Background color hover"
+      },
+      {
+        "type":  "header",
+        "content": "Block product"
+      },
+      {
+        "type": "collection",
+        "id": "collection",
+        "label": "Collection"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_border_item",
+        "label": "Show border item",
+        "default": true
+      },
+      {
+        "type": "color",
+        "id": "c_border_item",
+        "label": "Border color"
+      },
+      {
+        "type":  "header",
+        "content": "Product item per row"
+      },
+      {
+        "type": "range",
+        "id": "xxl",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "label": "Extra desktop",
+        "default": 4,
+        "info": "Breakpoint 1440px ↑"
+      },
+      {
+        "type": "range",
+        "id": "xl",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "label": "Large desktop",
+        "default": 4,
+        "info": "Breakpoint 1200px ↑"
+      },
+      {
+        "type": "range",
+        "id": "lg",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "label": "Desktop",
+        "default": 4,
+        "info": "Breakpoint 992px ↑"
+      },
+      {
+        "type": "range",
+        "id": "md",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "label": "Tablet",
+        "default": 3,
+        "info": "Breakpoint 768px ↑"
+      },
+      {
+        "type": "range",
+        "id": "sm",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "label": "Large mobile",
+        "default": 2,
+        "info": "Breakpoint 576px ↑"
+      },
+      {
+        "type": "range",
+        "id": "xs",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "label": "Mobile",
+        "default": 2,
+        "info": "Breakpoint 575px ↓"
+      },
+      {
+        "type": "range",
+        "id": "limit",
+        "min": 4,
+        "max": 30,
+        "step": 1,
+        "label": "Limit",
+        "default": 30,
+        "info": "Select number limit products"
+      },
+      {
+        "type": "range",
+        "id": "spacing",
+        "min": 0,
+        "max": 30,
+        "step": 5,
+        "unit": "px",
+        "label": "Spacing",
+        "default": 30,
+        "info": "Spacing item"
+      },
+      {
+        "type":  "header",
+        "content": "Slider options"
+      },
+      {
+        "type": "range",
+        "id": "row_number",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "label": "Number row",
+        "default": 1
+      },
+      {
+        "type": "range",
+        "id": "row_mobile",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "label": "Number row mobile",
+        "default": 1
+      },
+      {
+        "type": "checkbox",
+        "id": "show_nav",
+        "label": "Show navigation",
+        "default": false
+      },
+      {
+        "type":  "header",
+        "content": "Design option"
+      },
+      {
+        "type": "checkbox",
+        "id": "animate",
+        "label": "Show animated",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "br_container",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "Border radius container",
+        "default": 0
+      },
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Container",
+        "default": "container",
+        "options": [
+          { "value": "container", "label": "Container" },
+          { "value": "container-fluid", "label": "Container fluid" },
+          { "value": "container-full", "label": "Container full width" }
+        ]
+      },
+      {
+        "type": "color",
+        "id": "c_border",
+        "label": "Border color"
+      },
+      {
+        "type": "color",
+        "id": "background_color",
+        "label": "Background colors"
+      },
+      {
+        "type": "image_picker",
+        "id": "background_image",
+        "label": "Background image"
+      },
+      {
+        "type": "select",
+        "id": "bg_size",
+        "label": "Background size",
+        "default": "full",
+        "options": [
+          { "value": "content", "label": "Container" },
+          { "value": "full", "label": "Full width" }
+        ]
+      },
+      {
+        "type": "text",
+        "id": "class",
+        "label": "Class"
+      },
+      {
+        "type": "number",
+        "id": "distance_top",
+        "label": "Top spacing section (px)",
+        "default": 30
+      },
+      {
+        "type": "number",
+        "id": "distance_bottom",
+        "label": "Bottom spacing section (px)",
+        "default": 30
+      }
+    ],
+    "blocks": [
+      {
+        "type": "link",
+        "name": "Link Item",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title"
+          },
+          {
+            "type": "url",
+            "id": "link",
+            "label": "Link"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Vinova Products Slider",
+        "category": "Collection"
+      }
+    ]
+  }
+{% endschema %}
+{%- assign bg_image = sst.background_image -%}
+<style>
+  #shopify-section-{{ section.id }} .nov-slick-carousel:not(.slick-initialized) .block {
+    width: {{ xs }}%;
+    flex: 0 0 {{ xs }}%;
+  }
+  @media(min-width:  576px) {
+    #shopify-section-{{ section.id }} .nov-slick-carousel:not(.slick-initialized) .block {
+      width: {{ sm }}%;
+      flex: 0 0 {{ sm }}%;
+    }
+  }
+  @media(min-width:  768px) {
+    #shopify-section-{{ section.id }} .nov-slick-carousel:not(.slick-initialized) .block {
+      width: {{ md }}%;
+      flex: 0 0 {{ md }}%;
+    }
+  }
+  @media(min-width:  992px) {
+    #shopify-section-{{ section.id }} .nov-slick-carousel:not(.slick-initialized) .block {
+      width: {{ lg }}%;
+      flex: 0 0 {{ lg }}%;
+    }
+  }
+  @media(min-width:  1200px) {
+    #shopify-section-{{ section.id }} .nov-slick-carousel:not(.slick-initialized) .block {
+      width: {{ xl }}%;
+      flex: 0 0 {{ xl }}%;
+    }
+  }
+  @media(min-width:  1440px) {
+    #shopify-section-{{ section.id }} .nov-slick-carousel:not(.slick-initialized) .block {
+      width: {{ xxl }}%;
+      flex: 0 0 {{ xxl }}%;
+    }
+  }
+  {% if sst.bg_size == 'full' %}
+    #shopify-section-{{ section.id }} .distance {
+      padding-top: {{ sst.distance_top | append: 'px' }};
+      padding-bottom: {{ sst.distance_bottom | append: 'px' }};
+      border-radius: {{ sst.br_container | append: 'px' }};
+      {% if sst.background_color != blank or bg_image != blank %}
+        background: {{ sst.background_color }}{% if bg_image != blank %} url("{{ bg_image | img_url: '1920x' }}"){% endif %} no-repeat center;
+        background-size: cover;
+      {% endif %}
+    }
+    @media(max-width: 991px) {
+      #shopify-section-{{ section.id }} .distance {
+        {%- if sst.distance_top > 20 -%}padding-top: {{ sst.distance_top | times: 0.7 | round: 0 | append: 'px' }};{%- endif -%}
+        {%- if sst.distance_bottom > 20 -%}padding-bottom: {{ sst.distance_bottom | times: 0.7 | round: 0 | append: 'px' }};{%- endif -%}
+      }
+    }
+  {% else %}
+    #shopify-section-{{ section.id }} .container-inner {
+      padding-top: {{ sst.distance_top | append: 'px' }};
+      padding-bottom: {{ sst.distance_bottom | append: 'px' }};
+      border-radius: {{ sst.br_container | append: 'px' }};
+      {% if sst.background_color != blank or bg_image.src != blank %}
+        background: {{ sst.background_color }}{% if bg_image != blank %} url("{{ bg_image | img_url: '1920x' }}"){% endif %} no-repeat center;
+        background-size: cover;
+      {% endif %}
+    }
+    @media(max-width: 991px) {
+      #shopify-section-{{ section.id }} .container-inner {
+        {%- if sst.distance_top > 20 -%}padding-top: {{ sst.distance_top | times: 0.7 | round: 0 | append: 'px' }};{%- endif -%}
+        {%- if sst.distance_bottom > 20 -%}padding-bottom: {{ sst.distance_bottom | times: 0.7 | round: 0 | append: 'px' }};{%- endif -%}
+      }
+    }
+  {% endif %}
+  #shopify-section-{{ section.id }} .btn-viewall {
+    color:  {{ sst.c_viewall }};
+  }
+  {%- if sst.bg_heading != 'rgba(0,0,0,0)' and sst.bg_heading != blank -%}
+    #shopify-section-{{ section.id }} .block-top .title_section, #shopify-section-{{ section.id }} .block-top .title_section:before {
+      background-color: {{ sst.bg_heading }};
+    }
+    #shopify-section-{{ section.id }} .block-viewall i, #shopify-section-{{ section.id }} .btn-viewall:hover {
+      color:  {{ sst.bg_heading }};
+    }
+  {%- else -%}
+    #shopify-section-{{ section.id }} .block-viewall i, #shopify-section-{{ section.id }} .btn-viewall:hover {
+      color:  var(--theme-color-default);
+    }
+  {%- endif -%}
+  {%- if sst.show_border -%}
+    #shopify-section-{{ section.id }} .block-top {
+      border-bottom: 1px solid {{ sst.c_border }};
+    }
+    #shopify-section-{{ section.id }} .nov-block__collec-list a {
+      border-color:  {{ sst.c_border }};
+    }
+    #shopify-section-{{ section.id }} .nov-block__collec-flex {
+      border-bottom:  1px solid {{ sst.c_border }};
+    }
+  {%- endif -%}
+  {%- if sst.show_border_item -%}
+    #shopify-section-{{ section.id }} .show-border .p_item,
+    #shopify-section-{{ section.id }} .block-product__slider.collection-border,
+    #shopify-section-{{ section.id }} .block-product__slider.border-bottom {
+      border-color: {{ sst.c_border_item }};
+    }
+  {%- endif -%}
+  {%- if sst.show_el == 'collection' -%}
+    {%- if sst.c_collect != blank -%}
+      #shopify-section-{{ section.id }} .el-collection a {
+        color: {{ sst.c_collect }};
+        background-color: {{ sst.bg_collect }};
+      }
+    {%- endif -%}
+    @media(min-width:  768px) {
+      #shopify-section-{{ section.id }} .nov-block__collec-flex {
+        padding:  10px 30px;
+      }
+    }
+    {%- if sst.c_collect != blank -%}
+      #shopify-section-{{ section.id }} .el-collection a:hover {
+        color:  {{ sst.c_collecth }};
+        background-color: {{ sst.bg_collecth }};
+      }
+    {%- endif -%}
+  {%- endif -%}
+</style>
